@@ -1,0 +1,13 @@
+name = "ProcessSim"
+uuid = "39f01f1a-e305-4eda-b4c1-78de7c40982d"
+authors = ["Duncan Paterson <duncan_paterson@outlook.com> and contributors"]
+version = "0.1.0"
+
+[compat]
+julia = "1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
