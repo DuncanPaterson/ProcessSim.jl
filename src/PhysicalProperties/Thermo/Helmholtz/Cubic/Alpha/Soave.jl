@@ -22,3 +22,12 @@ function Alpha(T, Model::SoaveAlphaPolynomial)
 
     return alpha
 end
+
+
+function SoaveAlpham(ω)
+    return 0.48 + 1.574 * ω - 0.175 * ω^2
+end
+
+function PRAlpham(ω)
+    return 0.17464 + 1.54226 * ω - 0.26992 * ω^2
+end
