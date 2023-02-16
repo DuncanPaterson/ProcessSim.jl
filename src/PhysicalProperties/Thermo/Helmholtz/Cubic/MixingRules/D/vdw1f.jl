@@ -5,9 +5,8 @@ struct vdw1f_D{TVector, TMatrix, Alpha} <: Cubic_D
     alpha::Alpha
 end
 
-function CubicD(n, T, Model::Linear_B)
+function CubicD(T, n, Model::vdw1f_D)
+    sqrt_a = sqrt.(Model.a_c .* Alpha(T, Model.alpha))
 
-    sqrt_a = sqrt.(Model.a_c .* CubicAlpha(T, Model::Alpha))
-
-    return n' * (((sqrt_a * sqrt_a') .* (1.0 - kij)) * n)
+    return n' * (((sqrt_a * sqrt_a') .* (1.0 .- Model.kij)) * n)
 end

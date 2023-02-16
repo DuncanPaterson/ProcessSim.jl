@@ -1,5 +1,5 @@
 
-abstract type CubicModel end
+abstract type CubicModel <: HelmholtzModel end
 
 struct GeneralCubic{TReal, DModel, BModel} <: CubicModel
     δ₁::TReal
@@ -9,7 +9,6 @@ struct GeneralCubic{TReal, DModel, BModel} <: CubicModel
 end
 
 function Helmholtz(T, V, n, Model::GeneralCubic)
-
     D = CubicD(T, n, Model.D_model)
     B = CubicB(n, Model.B_model)
     δ₁ = Model.δ₁

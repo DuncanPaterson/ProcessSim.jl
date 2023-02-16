@@ -1,13 +1,18 @@
 
-struct vdw1f_D{TVector, TMatrix, Alpha} <: Cubic_D
-    a_c::TVector
-    kij::TMatrix
-    alpha::Alpha
+struct MockAlpha
+
 end
 
-function CubicD(n, T, Model::vdw1f_D)
+function ProcessSim.Alpha(T::Float64, Model::MockAlpha)
+    return [1.0, 1.0, 1.0]
+end
 
-    sqrt_a = sqrt.(Model.a_c .* CubicAlpha(T, Model::Alpha))
 
-    return n' * (((sqrt_a * sqrt_a') .* (1.0 - kij)) * n)
+@testset "vdw1f D" begin
+    a_c = [0.5, 0.4, 0.3]
+    params = ProcessSim.vdw1f_D(a_c, [0.0 0.0 0.0; 0.0 0.0 0.0; 0.0 0.0 0.0], MockAlpha())
+    n = [0.3, 0.3, 0.4]
+    T = 120.0
+    f =  ProcessSim.Alpha(T, MockAlpha())
+    @test ProcessSim.CubicD(T, n, params) ≈ n' * ((sqrt.(a_c * a_c')) * n)
 end
