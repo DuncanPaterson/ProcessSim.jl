@@ -6,3 +6,4 @@ end
 function CubicB(n, Model::Linear_B)
     return sum(n .* Model.b_c)
 end
+

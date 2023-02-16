@@ -1,8 +1,4 @@
 
-import PhysicalConstants.CODATA2018: N_A, k_B
-
-const R = N_A * k_B
-
 abstract type CubicModel end
 
 struct GeneralCubic{TReal, DModel, BModel} <: CubicModel
