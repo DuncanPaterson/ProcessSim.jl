@@ -1,3 +1,6 @@
+
+using StaticArrays
+
 module ProcessSim
 
 include("PhysicalProperties/PhysicalProperty.jl")

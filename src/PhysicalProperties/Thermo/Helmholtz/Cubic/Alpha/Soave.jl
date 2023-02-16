@@ -3,23 +3,21 @@
 struct SoaveAlphaPolynomial{TMatrix,TVector} <: AlphaModel
     c::TMatrix
     T_c::TVector
-    a_c::TVector
 end
 
 function Alpha(T, Model::SoaveAlphaPolynomial)
-    alpha = similar(Model.T_c)
-    one_min_tr = similar(alpha)
 
+    tr  = sqrt.(T ./ Model.T_c)
+    one_min_tr = 1.0 .- tr
+    alpha = similar(tr)
     alpha .= 1.0
-    one_min_tr .= 1.0 .- sqrt.(T ./ Model.T_c)
 
-    for i in range(size(Model.c, 2))
+    for i in range(1, size(Model.c, 2))
         ci = Model.c[:, i]
-        alpha .= alpha + ci * one_min_tr
+        alpha .= alpha .+ ci .* one_min_tr.^i
     end
 
-    alpha .= alpha .* alpha
-
+    alpha .= alpha.^2
     return alpha
 end
 

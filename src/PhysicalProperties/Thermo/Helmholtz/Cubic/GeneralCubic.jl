@@ -8,7 +8,7 @@ abstract type CubicModel end
 struct GeneralCubic{TReal, DModel, BModel} <: CubicModel
     δ₁::TReal
     δ₂::TReal
-    D_model::AModel
+    D_model::DModel
     B_model::BModel
 end
 
