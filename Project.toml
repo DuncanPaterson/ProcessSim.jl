@@ -3,6 +3,10 @@ uuid = "39f01f1a-e305-4eda-b4c1-78de7c40982d"
 authors = ["Duncan Paterson <duncan_paterson@outlook.com> and contributors"]
 version = "0.1.0"
 
+[deps]
+Clapeyron = "7c7805af-46cc-48c9-995b-ed0ed2dc909a"
+PhysicalConstants = "5ad8b20f-a522-5ce9-bfc9-ddf1d5bda6ab"
+
 [compat]
 julia = "1"
 
