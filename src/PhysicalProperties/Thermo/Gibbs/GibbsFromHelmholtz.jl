@@ -1,39 +1,25 @@
 
+GFromArCubic(T, sumn, B, V, D, δ₁, δ₂, P) = Ar_Cubic(T, sumn, B, V, D, δ₁, δ₂) + P * V - sumn * R * T * (1 + log(P * V / (sumn * R * T)))
 
-struct GibbsFromHelmholtzModel{HelmholtzModel} <: GibbsModel
-    helmholtz_model::HelmholtzModel
-end
-
-function Gibbs(T, P, n, Model::GibbsFromHelmholtzModel, Vini = 0.0)
-
-    function HelmFromV(V)
-        return Helmholtz(T, V, n, Model.helmholtz_model)
-    end
-    nRT = sum(n) * R * T
-    result = DiffResults.HessianResult([Vini])
-
-    function fJ!(F, J, V)
-
-        if !(J === nothing)
-            result = ForwardDiff.hessian!(result, HelmFromV, V)
-            Pcalc = nRT / V[1] - DiffResults.gradient(result)
-            if !(F === nothing)
-                F[1] = P - Pcalc
-            end
-            J[1,1] = -nRT / V[1]^2 - DiffResults.Hessian(result)
-        else if !(F===nothing)
-            result = ForwardDiff.hessian!(result, HelmFromV, V)
-            Pcalc = nRT / V[1] - DiffResults.gradient(result)
-            F[1] = P - Pcalc
+function Gibbs(T, P, n, Model::GeneralCubic, Vini = nothing)
+    v_min, v_mid, v_max, D, B = Volume(T, P, n, Model)
+    sumn = sum(n)
+    δ₁ = Model.δ₁
+    δ₂ = Model.δ₂
+    if !(isnan(v_max))
+        if (Vini === nothing)
+            return min(GFromArCubic(T, sumn, B, v_min, D, δ₁, δ₂, P), GFromArCubic(T, sumn, B, v_max, D, δ₁, δ₂, P))
+        end
+        dv1 = abs(v_min / V - 1)
+        dv2 = abs(v_max / V - 1)
+        if (dv1 < dv2)
+            return GFromArCubic(T, sumn, B, v_min, D, δ₁, δ₂, P)
+        else
+            return GFromArCubic(T, sumn, B, v_max, D, δ₁, δ₂, P)
         end
     end
+    return GFromArCubic(T, sumn, B, v_min, D, δ₁, δ₂, P)
+end
 
-    if (Vini != 0.0)
-        nlsolve(only_fj!(fJ), [Vini])
-    else
-        V = [nRT / P]
-        nlsolve()
-    end
-
-
+function Gibbs(T, P, n, Model::HelmModel, Vini = nothing) where{HelmModel <: HelmholtzModel}
 end
